@@ -52,17 +52,24 @@ types:
 
 
 methods:
-- Tokenize(string) ([]Node, []Error) // Main method of this package, returns the tokenized contents of the string
-  // Will take the first node in the string and check if it's selfclosing (like <br> or <img>), then either detect its end or call parse() with it and its contents, then does the same with the remaining string
-  // Finds the first index of '<', verifies it is on position 0, then takes everything up to the next space, then does a switch case on it to determine the type
-  // If the first index of '<' is not 0, verifies that everything before is only whitespace, and if there is a linebreak it in, verifies that all except the last don't have other whitespace in it, else add it to the warnings. If the last linebreak has trailing whitespace, make sure to check every following linebreak to have the same whitespace next to it. If not, add it to the warnings. If there is as much whitespace, remove it on each line, so its considered only once
-
 - validateNode() // Checks the type and its attributes to be valid together, but also whether the types/contents of the attributes fit it
 
 sidenotes:
-- the errors are custom types (internally?), so multiple errors can be passed back in one go
-- have Node.RecursiveWarnings() and Node.RecursiveErrors() functions that goes into the nodetree and returns all warnings and errors of all nodes
-- Node.parse() should also check the indentation of the whole node, f.e. 
-- verify indentation 
+- the errors are custom types (internally?), so multiple errors can be passed back in one go and also so that line and char numbers can be returned properly
 
+// TODO
+- Node.isThisCssSelectorUsed(cssSelector string) bool // Checks if this node or any child nodes fit this css selector
+- Node.areAllCssClassesDefined([]definedCssSelector) bool // Checks if any the defined css classes is never used by this node or any child nodes
+- validation of
+  - indentation
+  - allowed child node types
+  - closing tags present
+  - attribute key names
+  - attribute key name combinations
+  - attribute value type has to fit attribute key
+  - attribute value could be limited to certain values depending on attribute key
+- docs for
+  - whitespace collapsing on text (leading and trailing whitespace of stringdata is removed, as well as multiple whitespace chars directly after another are all collapsed into a single space, all whitespace is transformed into single spaces)
 
+- todo in tokenizer, all issues are actually errors.
+  issue package is unnecessary
